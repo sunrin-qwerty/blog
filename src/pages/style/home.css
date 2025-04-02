@@ -1,0 +1,74 @@
+.posts {
+    display: flex;
+    margin-top: 30vh;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.post {
+    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 2rem;
+    padding: 2rem;
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 70%;
+}
+
+p.tage_name {
+    font-size: 1.5rem;
+    color: #7E92F6;
+    font-weight: bold;
+}
+
+.title-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.title-box .title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: whitesmoke;
+    margin: 0;
+}
+
+.title-box .date {
+    font-size: 1rem;
+    color: #c4c4c4;
+    font-weight: 400;
+}
+
+p.date {
+    font-size: 1.5rem;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
+.avatars {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
