@@ -36,12 +36,12 @@ const Home: React.FC = () => {
             <div className="posts">
                 {posts.map((post, index) => (
                     <div key={index} className="post" onClick={() => navigator(`/post/${post.id}`)}>
-                        <p className='tage_name'>{post.tage_name}</p>
-                            <div className="title-box">
-                                <h2 className='title'>{post.title}</h2>
-                                <p className='date'>{post.created_at}</p>
-                            </div>
-                        <p className='explantion'>{post.explanation}</p>
+                    <p className='tage_name'>{post.tage_name}</p>
+                        <div className="title-box">
+                            <h2 className='title'>{post.title}</h2>
+                            <p className='date'>{post.created_at}</p>
+                        </div>
+                    <p className='explantion'>{post.explanation}</p>
                         <div className="post-author">
                             <img src={`https://cdn.discordapp.com/avatars/${post.discord_id}/${post.avatar}.png`} alt="User Avatar" className="avatars" />
                             <p>{post.username}</p>

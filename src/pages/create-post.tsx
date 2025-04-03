@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import './../App.css'
 import './style/header.css'
 import Headers from './header'
+import Markdown from 'react-markdown'
 
 interface User {
   username: string
@@ -17,17 +18,37 @@ interface PostData {
   tagId?: number
 }
 
+interface tage {
+  id: number
+  tage_name: string
+}
+
 const WritePost: React.FC = () => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [post, setPost] = useState<PostData>({ title: '', content: '', explanation: '', tagId: undefined })
   const [error, setError] = useState<string | null>(null)
+  const [tags, setTags] = useState<tage[]>([])
   const navigate = useNavigate()
   const backendAuthUrl = 'http://localhost:3000/auth/discord'
   const backendApiUrl = 'http://localhost:3000/add'
+  const backendSelectUrltg = 'http://localhost:3000/select/tage'
 
   useEffect(() => {
     checkUserStatus()
+  }, [])
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await axios.get(backendSelectUrltg, { withCredentials: true })
+        setTags(response.data)
+      } catch (error) {
+        console.error('Error fetching tags:', error)
+      }
+    }
+
+    fetchTags()
   }, [])
 
   const checkUserStatus = async () => {
@@ -83,59 +104,56 @@ const WritePost: React.FC = () => {
   return (
     <>
       <Headers />
-      <h1>QWERTY Blog - Write a Post</h1>
       {user ? (
         <div className="write-post">
-          <h2>Welcome, {user.username}!</h2>
+          <h2>{user.username}계정으로 글을 작성합니다.</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="title">Title:</label>
               <input
                 type="text"
                 id="title"
                 name="title"
                 value={post.title}
                 onChange={handleInputChange}
-                placeholder="Enter post title"
+                placeholder="제목을 입력하세요"
                 required
               />
             </div>
             <div className="form-group">
-              <label htmlFor="content">Content:</label>
               <textarea
                 id="content"
                 name="content"
                 value={post.content}
                 onChange={handleInputChange}
-                placeholder="Write your content here (Markdown supported)"
+                placeholder="내용을 입력하세요"
                 rows={10}
                 required
               />
+              <Markdown>{post.content}</Markdown>
             </div>
             <div className="form-group">
-              <label htmlFor="tagId">Tag (Optional):</label>
-              <input
-                type="number"
-                id="tagId"
-                name="tagId"
-                value={post.tagId !== undefined ? post.tagId : ''}
-                onChange={handleTagChange}
-                placeholder="Enter tag ID"
-              />
+              <label htmlFor="tagId">태그를 선택하세요:</label>
+              <select id="tagId" name="tagId" onChange={handleTagChange}>
+                <option value="">Select a tag</option>
+                {tags.map((tag) => (
+                  <option key={tag.id} value={tag.id}>
+                    {tag.tage_name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className='explanation'>
-              <label htmlFor="explanation">Explanation:</label>
               <input
                 type="text"
                 id="explanation"
                 name="explanation"
                 value={post.explanation}
                 onChange={handleInputChange}
-                placeholder="Enter explanation (Optional)"
+                placeholder="간단한 설명을 입력하세요"
               />
             </div>
             {error && <p className="error-message">{error}</p>}
-            <button type="submit">Submit Post</button>
+            <button type="submit">Upload</button>
           </form>
           <button onClick={() => navigate('/profile')} className="back-button">
             Back to Profile

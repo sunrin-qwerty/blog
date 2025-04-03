@@ -46,6 +46,7 @@ const Profile: React.FC = () => {
           <div className="user-profile">
             <h2>Welcome, {user.username}!</h2>
             <p>Email: {user.email}</p>
+            <button onClick={() => navigate('/create-post')}>Create Post</button>
           </div>
         ) : (
           <div>
