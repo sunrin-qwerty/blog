@@ -14,7 +14,7 @@ header {
 .hd-logo {
     display: flex;
     align-items: center;
-    margin-left: 2em;
+    margin-left: 1em;
 }
 
 .hd-logo img {
@@ -72,17 +72,4 @@ ul.nav li:last-child a {
 
 ul.nav li a:hover {
     background-color: rgba(255, 255, 255, 0.2);
-}
-
-@media (max-width: 768px) {
-    header {
-        left: 0;
-        transform: none;
-        width: 100%;
-    }
-    
-    .hd-logo h1 {
-        font-size: 1em;
-        color: whitesmoke;
-    }
 }

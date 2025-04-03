@@ -8,10 +8,8 @@
     align-items: center;
 }
 
-
 .post {
     flex-direction: column;
-    flex-direction: row;
     align-items: center;
     text-align: left;
     gap: 2rem;
@@ -71,4 +69,56 @@ p.date {
     border: 2px solid #fff;
     transition: transform 0.4s ease, box-shadow 0.4s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .posts {
+        flex-direction: column;
+        margin-top: 10vh;
+    }
+
+    .post {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .title-box .title {
+        font-size: 2rem;
+    }
+
+    p.tage_name {
+        font-size: 1.2rem;
+    }
+
+    p.date {
+        font-size: 1.2rem;
+    }
+
+    .avatars {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .post {
+        padding: 1rem;
+    }
+
+    .title-box .title {
+        font-size: 1.8rem;
+    }
+
+    p.tage_name {
+        font-size: 1rem;
+    }
+
+    p.date {
+        font-size: 1rem;
+    }
+
+    .avatars {
+        width: 30px;
+        height: 30px;
+    }
 }

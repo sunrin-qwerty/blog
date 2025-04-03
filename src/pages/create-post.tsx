@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import './../App.css'
 import './style/header.css'
+import './style/create-post.css'
 import Headers from './header'
 import Markdown from 'react-markdown'
 
@@ -70,7 +71,7 @@ const WritePost: React.FC = () => {
     setPost((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value
     setPost((prev) => ({ ...prev, tagId: value ? parseInt(value) : undefined }))
   }
@@ -79,7 +80,12 @@ const WritePost: React.FC = () => {
     e.preventDefault()
     setError(null)
     if (!post.title || !post.content) {
-      setError('Title and content are required.')
+      setError('Title 과 Content는 필수입니다') 
+      return
+    }
+
+    if (post.tagId === undefined) {
+      setError('Tag를 선택해주세요')
       return
     }
     try {
@@ -106,34 +112,45 @@ const WritePost: React.FC = () => {
       <Headers />
       {user ? (
         <div className="write-post">
-          <h2>{user.username}계정으로 글을 작성합니다.</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="form-container">
+            <h2 className="form-title">글쓰기</h2>
             <div className="form-group">
+              <label className="form-label">Title</label>
               <input
                 type="text"
                 id="title"
                 name="title"
                 value={post.title}
                 onChange={handleInputChange}
-                placeholder="제목을 입력하세요"
+                placeholder="Enter the title"
                 required
+                className="form-input"
               />
             </div>
             <div className="form-group">
-              <textarea
-                id="content"
-                name="content"
-                value={post.content}
-                onChange={handleInputChange}
-                placeholder="내용을 입력하세요"
-                rows={10}
-                required
-              />
-              <Markdown>{post.content}</Markdown>
+              <label className="form-label">Content</label>
+              <div className="content-container">
+                <textarea
+                  id="content"
+                  name="content"
+                  value={post.content}
+                  onChange={handleInputChange}
+                  placeholder="Write your content here"
+                  rows={10}
+                  required
+                  className="form-textarea"
+                />
+                <label className="form-label">Preview</label>
+                <div className="preview-container">
+                  <div className="markdown-preview">
+                    <Markdown>{post.content}</Markdown>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="form-group">
-              <label htmlFor="tagId">태그를 선택하세요:</label>
-              <select id="tagId" name="tagId" onChange={handleTagChange}>
+              <label className="form-label" htmlFor="tagId">Tag</label>
+              <select id="tagId" name="tagId" onChange={handleTagChange} className="form-select">
                 <option value="">Select a tag</option>
                 {tags.map((tag) => (
                   <option key={tag.id} value={tag.id}>
@@ -142,25 +159,24 @@ const WritePost: React.FC = () => {
                 ))}
               </select>
             </div>
-            <div className='explanation'>
+            <div className="form-group">
+              <label className="form-label" htmlFor="explanation">Explanation</label>
               <input
                 type="text"
                 id="explanation"
                 name="explanation"
                 value={post.explanation}
                 onChange={handleInputChange}
-                placeholder="간단한 설명을 입력하세요"
+                placeholder="Add a brief explanation"
+                className="form-input"
               />
             </div>
             {error && <p className="error-message">{error}</p>}
-            <button type="submit">Upload</button>
+            <button type="submit" className="form-button">Upload</button>
           </form>
-          <button onClick={() => navigate('/profile')} className="back-button">
-            Back to Profile
-          </button>
         </div>
       ) : (
-        <div>
+        <div className="login-prompt">
           <p>You need to be logged in to write a post.</p>
           <button onClick={() => navigate('/')} className="back-button">
             Back to Login

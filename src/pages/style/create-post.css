@@ -1,0 +1,126 @@
+/* filepath: /Users/kimrasng/dev/sunrin/qwerty/qwerty-blog/frontend/src/pages/style/create-post.css */
+
+.write-post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 8px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: whitesmoke;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-label {
+    font-size: 20px;
+    font-weight: 1000;
+    color: whitesmoke;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 90%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid whitesmoke;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    margin: 0 auto; /* Center alignment */
+    display: block; /* Ensure block-level element for centering */
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    border-color: #7E92F6;
+}
+
+.form-textarea {
+    resize: vertical;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.preview-container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #ddd;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+
+.markdown-preview {
+    font-size: 14px;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.error-message {
+    color: #d9534f;
+    font-size: 14px;
+    text-align: center;
+}
+
+.form-button {
+    padding: 10px 20px;
+    width: 20%;
+    margin: 0 auto; /* Center alignment */
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-button:hover {
+    background-color: #0056b3;
+}
+
+.login-prompt {
+    text-align: center;
+    padding: 20px;
+}
+
+.back-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #6c757d;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
+}
