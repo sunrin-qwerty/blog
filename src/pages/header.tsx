@@ -12,7 +12,7 @@ interface User {
     avatar?: string
 }
 
-const backendAuthUrl = "http://localhost:3000/auth/discord"
+const backendAuthUrl = "https://blog.sunrint-qwerty.kr/apiauth/discord"
 
 const Headers: React.FC = () => {
     const [user, setUser] = useState<User | null>(null)

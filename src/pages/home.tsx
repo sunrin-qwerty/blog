@@ -4,10 +4,11 @@ import './../App.css'
 import Headers from './header'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-const backendSelectUrl = "http://localhost:3000/select"
+const backendSelectUrl = "https://blog.sunrint-qwerty.kr/api/select"
 
 const Home: React.FC = () => {
     const [posts, setPosts] = useState<any[]>([])
+    const [tags, setTags] = useState<any[]>([])
     const navigator = useNavigate()
 
     const formatDate = (dateString: string): string => {
@@ -30,9 +31,53 @@ const Home: React.FC = () => {
             })
     }, [])
 
+    useEffect(() => {
+        axios.get(`${backendSelectUrl}/tage`)
+            .then(({ data }) => {
+                setTags(data)
+            })
+    }
+    , [])
+
     return (
         <>
             <Headers />
+            <div className='tag-list'>
+                <button className='tage_name'
+                    onClick={() => {
+                        axios.get(`${backendSelectUrl}/posts`)
+                            .then(({ data }) => {
+                                const formattedPosts = data.map((post: any) => ({
+                                    ...post,
+                                    created_at: formatDate(post.created_at),
+                                    updated_at: formatDate(post.updated_at)
+                                }))
+                                setPosts(formattedPosts)
+                            })
+                    }}
+                
+                >All</button>
+                {tags.map((tag, index) => (
+                    <div key={index} className='tag-box'>
+                        <button 
+                            className='tag_name'
+                            onClick={() => {
+                                axios.get(`${backendSelectUrl}/posts?tag_id=${tag.id}`)
+                                    .then(({ data }) => {
+                                        const filteredPosts = data.map((post: any) => ({
+                                            ...post,
+                                            created_at: formatDate(post.created_at),
+                                            updated_at: formatDate(post.updated_at)
+                                        }))
+                                        setPosts(filteredPosts)
+                                    })
+                            }}
+                        >
+                            {tag.tage_name}
+                        </button>
+                    </div>
+                ))}
+            </div>
             <div className="posts">
                 {posts.map((post, index) => (
                     <div key={index} className="post" onClick={() => navigator(`/post/${post.id}`)}>

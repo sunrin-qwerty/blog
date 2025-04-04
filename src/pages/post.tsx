@@ -3,7 +3,7 @@ import './../App.css'
 import Headers from './header'
 import axios from 'axios'
 import Markdown from 'react-markdown'
-const backendSelectUrl = "http://localhost:3000/select"
+const backendSelectUrl = "https://blog.sunrint-qwerty.kr/api/select"
 
 const Post: React.FC = () => {
     const [posts, setPosts] = useState<any[]>([])

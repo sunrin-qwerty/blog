@@ -1,6 +1,16 @@
+.tag-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 30em;
+}
+
 .posts {
     display: flex;
-    margin-top: 30vh;
+    margin-top: 2vh;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 1rem;

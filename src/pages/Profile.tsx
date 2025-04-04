@@ -14,7 +14,7 @@ const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
-    const backendAuthUrl = "http://localhost:3000/auth/discord"
+    const backendAuthUrl = "https://blog.sunrint-qwerty.kr/api/auth/discord"
 
   useEffect(() => {
     checkUserStatus()

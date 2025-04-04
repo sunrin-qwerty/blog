@@ -9,6 +9,8 @@ import Markdown from 'react-markdown'
 
 interface User {
   username: string
+  id: number
+  avatar: string
   email: string
 }
 
@@ -19,7 +21,7 @@ interface PostData {
   tagId?: number
 }
 
-interface tage {
+interface Tag {
   id: number
   tage_name: string
 }
@@ -29,26 +31,18 @@ const WritePost: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [post, setPost] = useState<PostData>({ title: '', content: '', explanation: '', tagId: undefined })
   const [error, setError] = useState<string | null>(null)
-  const [tags, setTags] = useState<tage[]>([])
+  const [tags, setTags] = useState<Tag[]>([])
+  const [newTag, setNewTag] = useState<string>('')
   const navigate = useNavigate()
-  const backendAuthUrl = 'http://localhost:3000/auth/discord'
-  const backendApiUrl = 'http://localhost:3000/add'
-  const backendSelectUrltg = 'http://localhost:3000/select/tage'
+  const backendAuthUrl = 'https://blog.sunrint-qwerty.kr/api/auth/discord'
+  const backendApiUrl = 'https://blog.sunrint-qwerty.kr/api/add'
+  const backendSelectUrltg = 'https://blog.sunrint-qwerty.kr/api/select/tage'
 
   useEffect(() => {
     checkUserStatus()
   }, [])
 
   useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const response = await axios.get(backendSelectUrltg, { withCredentials: true })
-        setTags(response.data)
-      } catch (error) {
-        console.error('Error fetching tags:', error)
-      }
-    }
-
     fetchTags()
   }, [])
 
@@ -66,6 +60,15 @@ const WritePost: React.FC = () => {
     }
   }
 
+  const fetchTags = async () => {
+    try {
+      const response = await axios.get(backendSelectUrltg, { withCredentials: true })
+      setTags(response.data)
+    } catch (error) {
+      console.error('Error fetching tags:', error)
+    }
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setPost((prev) => ({ ...prev, [name]: value }))
@@ -76,11 +79,27 @@ const WritePost: React.FC = () => {
     setPost((prev) => ({ ...prev, tagId: value ? parseInt(value) : undefined }))
   }
 
+  const handleNewTagSubmit = async () => {
+    if (!newTag.trim()) return
+    try {
+      const response = await axios.post(
+        backendApiUrl + '/tag',
+        { tagName: newTag.trim() },
+        { withCredentials: true }
+      )
+      setTags((prevTags) => [...prevTags, response.data])
+      setNewTag('')
+      window.location.reload()
+    } catch (error) {
+      console.error('Error adding new tag:', error)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     if (!post.title || !post.content) {
-      setError('Title 과 Content는 필수입니다') 
+      setError('Title 과 Content는 필수입니다')
       return
     }
 
@@ -111,70 +130,111 @@ const WritePost: React.FC = () => {
     <>
       <Headers />
       {user ? (
-        <div className="write-post">
-          <form onSubmit={handleSubmit} className="form-container">
-            <h2 className="form-title">글쓰기</h2>
-            <div className="form-group">
-              <label className="form-label">Title</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={post.title}
-                onChange={handleInputChange}
-                placeholder="Enter the title"
-                required
-                className="form-input"
-              />
-            </div>
-            <div className="form-group">
+        <div className="write-post-container">
+          <div className="write-post">
+            <form onSubmit={handleSubmit} className="form-container">
+              <h2 className="form-title">글쓰기</h2>
+              <div className="form-group">
+                <label className="form-label">Title</label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={post.title}
+                  onChange={handleInputChange}
+                  placeholder="Enter the title"
+                  required
+                  className="form-input" />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="tagId">Tag</label>
+                <select id="tagId" name="tagId" onChange={handleTagChange} className="form-select">
+                  <option value="">Select a tag</option>
+                  {tags.map((tag) => (
+                    <option key={tag.id} value={tag.id}>
+                      {tag.tage_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="newTag">Add New Tag</label>
+                <div className="new-tag-container">
+                  <input
+                    type="text"
+                    id="newTag"
+                    name="newTag"
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    placeholder="Enter new tag name"
+                    className="form-input" />
+                  <button
+                    type="button"
+                    onClick={handleNewTagSubmit}
+                    className="form-button"
+                  >
+                    Add Tag
+                  </button>
+                </div>
+              </div>
               <label className="form-label">Content</label>
               <div className="content-container">
-                <textarea
-                  id="content"
-                  name="content"
-                  value={post.content}
+                <div className="editor-preview-layout">
+                  <div className="editor-section">
+                    <textarea
+                      id="content"
+                      name="content"
+                      value={post.content}
+                      onChange={handleInputChange}
+                      placeholder="Write your content here"
+                      rows={15}
+                      required
+                      className="form-textarea" 
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="explanation">Explanation</label>
+                <input
+                  type="text"
+                  id="explanation"
+                  name="explanation"
+                  value={post.explanation}
                   onChange={handleInputChange}
-                  placeholder="Write your content here"
-                  rows={10}
-                  required
-                  className="form-textarea"
-                />
-                <label className="form-label">Preview</label>
-                <div className="preview-container">
-                  <div className="markdown-preview">
+                  placeholder="Add a brief explanation"
+                  className="form-input" />
+              </div>
+              {error && <p className="error-message">{error}</p>}
+              <button type="submit" className="form-button">Upload</button>
+            </form>
+          </div>
+            <div className="form-group">
+              <div className="preview-section">
+                <div className="markdown-preview">
+                  <div className="post">
+                    <p className="tage_name">
+                      {tags.find((tag) => tag.id === post.tagId)?.tage_name}
+                    </p>
+                    <div className="title-box">
+                      <h2 className="title">{post.title}</h2>
+                      <p className="date">{new Date().toLocaleDateString()}</p>
+                    </div>
                     <Markdown>{post.content}</Markdown>
+                    <div className="post-author">
+                      <img
+                        src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+                        alt="User Avatar"
+                        className="avatars"
+                      />
+                      <p>{user.username}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="tagId">Tag</label>
-              <select id="tagId" name="tagId" onChange={handleTagChange} className="form-select">
-                <option value="">Select a tag</option>
-                {tags.map((tag) => (
-                  <option key={tag.id} value={tag.id}>
-                    {tag.tage_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="explanation">Explanation</label>
-              <input
-                type="text"
-                id="explanation"
-                name="explanation"
-                value={post.explanation}
-                onChange={handleInputChange}
-                placeholder="Add a brief explanation"
-                className="form-input"
-              />
-            </div>
-            {error && <p className="error-message">{error}</p>}
-            <button type="submit" className="form-button">Upload</button>
-          </form>
         </div>
+        
       ) : (
         <div className="login-prompt">
           <p>You need to be logged in to write a post.</p>
